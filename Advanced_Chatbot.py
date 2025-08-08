@@ -41,8 +41,12 @@ def download_model_files(model_dir="/tmp/DistilGPT2_Model"):
 # Load spaCy model for NER
 @st.cache_resource
 def load_spacy_model():
-    nlp = spacy.load("en_core_web_trf")
-    return nlp
+    import spacy
+    try:
+        return spacy.load("en_core_web_sm")
+    except OSError:
+        spacy.cli.download("en_core_web_sm")
+        return spacy.load("en_core_web_sm")
 
 # Load the DistilGPT2 model and tokenizer
 @st.cache_resource(show_spinner=False)
